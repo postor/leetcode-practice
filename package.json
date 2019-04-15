@@ -1,0 +1,23 @@
+{
+  "name": "leetcode-practice",
+  "version": "1.0.0",
+  "description": "",
+  "main": "combination-sum.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/postor/leetcode-practice.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/postor/leetcode-practice/issues"
+  },
+  "homepage": "https://github.com/postor/leetcode-practice#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0"
+  }
+}

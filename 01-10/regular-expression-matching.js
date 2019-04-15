@@ -1,10 +1,11 @@
 /**
- * @param {string} s
- * @param {string} p
- * @return {boolean}
+ * 简单的正则匹配
+ * @param {string} s 字符串
+ * @param {string} p 正则表达式
+ * @return {boolean} 是否匹配
  */
 var isMatch = function (s, p) {
-  console.log({ s, p })
+  // 定义字符串和正则的进度下标，和上一个字符（*的时候用）
   let is = 0, ip = 0, lastChar = ''
   while (true) {
     const pchar = p[ip], schar = s[is]
@@ -15,7 +16,6 @@ var isMatch = function (s, p) {
       }
       return false
     }
-
     //*需要略过字母
     if (p[ip + 1] === '*') {
       lastChar = pchar
@@ -24,37 +24,35 @@ var isMatch = function (s, p) {
     }
 
     //单个匹配
-    if (pchar === '.') {      
+    if (pchar === '.') {
       if (schar === undefined) {
-        //console.log(`${pchar} mismatch ${schar}`)
         return false
       }
-      //console.log(`${pchar} match ${schar}`)
       is++
       ip++
       continue
     }
 
-    //多个匹配
+    // 多个匹配
     if (pchar === '*') {
       if (!lastChar) {
         return false
       }
-
+      // 到了正则末尾
       if (ip === p.length - 1) {
+        // 任意字符任意个数
         if (lastChar === '.') {
-          //任意字符任意个数
           return true
         } else {
-          //剩下的都是lastChar，例如/a*/.test('aaa') s.length=3 len=3 is=0
+          // 剩下的都是lastChar，例如/a*/.test('aaa') s.length=3 len=3 is=0
           let len = getCharLen(s, is, lastChar)
           return s.length === len + is
         }
       } else {
         let newP = p.substr(ip + 1)
         if (lastChar === '.') {
-          //只要后面有能匹配的即可，例如 /.*a/.test('aaa')
-          //aaa\aa\a能匹配a都可以
+          // 只要后面有能匹配的即可，例如 /.*a/.test('aaa')
+          // aaa\aa\a能匹配a都可以
           let arr = []
           for (let j = is; j <= s.length; j++) {
             arr.push({
@@ -64,8 +62,8 @@ var isMatch = function (s, p) {
           }
           return arr.some(({ s, p }) => isMatch(s, p))
         } else {
-          //只要后面有能匹配的即可，例如 /a*a/.test('aaa')
-          //aaa\aa\a能匹配a都可以
+          // 只要后面有能匹配的即可，例如 /a*a/.test('aaa')
+          // aaa\aa\a能匹配a都可以
           let len = getCharLen(s, is, lastChar)
 
           let arr = []
@@ -80,27 +78,14 @@ var isMatch = function (s, p) {
       }
     }
 
-    //字母匹配
+    // 字母匹配
     if (pchar !== schar) {
-      //console.log(`${pchar} mismatch ${schar}`)
       return false
     }
-    //console.log(`${pchar} match ${schar}`)
     is++
     ip++
   }
 };
-
-
-const a = 'a'.charCodeAt(0), z = 'z'.charCodeAt(0)
-function checkS(s) {
-  const charcode = s.charCodeAt(0)
-  return charcode >= a && charcode <= z
-}
-
-function checkP(p) {
-  return p === '*' || p === '.' || checkS(p)
-}
 
 function getCharLen(s, start, char) {
   let rtn = 0
@@ -114,7 +99,12 @@ function getCharLen(s, start, char) {
   return rtn
 }
 
-//console.log(isMatch("aab", "c*a*b"))
-//console.log(isMatch("aaa", "a*a"))
-//console.log(isMatch("mississippi", "mis*is*p*."))
-//console.log(isMatch("aabcbcbcaccbcaabc",".*a*aa*.*b*.c*.*a*"))
+console.log(isMatch("ray", "ra."))
+console.log(isMatch("raymond", "ra."))
+console.log(isMatch("chat", ".*at"))
+console.log(isMatch("chats", ".*at"))
+
+// console.log(isMatch("aab", "c*a*b"))
+// console.log(isMatch("aaa", "a*a"))
+// console.log(isMatch("mississippi", "mis*is*p*."))
+// console.log(isMatch("aabcbcbcaccbcaabc",".*a*aa*.*b*.c*.*a*"))
