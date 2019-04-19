@@ -4,11 +4,17 @@
  * @return {string}
  */
 var minWindow = function (s, t) {
+
   class W {
     constructor() {
       this.dic = {}
       this.str = ''
       this.i = 0
+      let tMeta = {}
+      for (let i = 0; i < t.length; i++) {
+        tMeta[t[i]] = (tMeta[t[i]] || 0) + 1
+      }
+      this.t = tMeta
     }
     add() {
       let c = s[this.i]
@@ -22,13 +28,12 @@ var minWindow = function (s, t) {
       this.str = this.str.substr(1)
     }
     contains() {
-      for (let i = 0; i < t.length; i++) {
-        if (!this.dic[t[i]]) return false
-      }
-      return true
+      return Object.keys(this.t).every(k => {
+        return (this.dic[k] || 0) >= this.t[k]
+      })
     }
   }
-  let min = s.length, rtn = '', w = new W()
+  let min = s.length + 1, rtn = '', w = new W()
   while (true) {
     if (!w.contains()) {
       //头挪一步
@@ -47,5 +52,8 @@ var minWindow = function (s, t) {
   return rtn
 };
 
-console.log(minWindow('ADOBECODEBANC', 'ABC'))
+
+console.log({ result: minWindow('aa', 'aa') })
+
+// console.log(minWindow('ADOBECODEBANC', 'ABC'))
 //"BANC"

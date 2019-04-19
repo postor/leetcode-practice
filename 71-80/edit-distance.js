@@ -4,31 +4,32 @@
  * @return {number}
  */
 var minDistance = function (word1, word2) {
-
+  // 动态规划结果缓存表
   let cache = Array(word1.length + 1).fill(0)
-    .map(x => Array(word2.length + 1).fill(0))
-
+    .map(() => Array(word2.length + 1).fill(0))
   for (let i = 0; i <= word1.length; i++) {
     cache[i][0] = i
   }
   for (let i = 0; i <= word2.length; i++) {
     cache[0][i] = i
   }
-  // 推理说明，假设参数为 "horse", "ros" 
+  // 动态规划推理说明，假设参数为 "horse", "ros" 
   //                      ""     r       ro       ros     目标
   // [0, 1, 2, 3]         0      1
-  // [1, 0, 0, 0]  h      1      替换=1
-  // [2, 0, 0, 0]  ho                    相等=1
-  // [3, 0, 0, 0]  hor                   删除=2
-  // [4, 0, 0, 0]  hors                           相等=2
-  // [5, 0, 0, 0]  horse                          删除=3
+  // [1, 0, 0, 0]  h      1      替换=1（替换=左上+1，h到r需替换1次）
+  // [2, 0, 0, 0]  ho                    相等=1（相等=左上，ho到ro和h到r的操作步骤相等）
+  // [3, 0, 0, 0]  hor                   删除=2（删除=上+1，hor到ros =  ho到ro + 1）
+  // [4, 0, 0, 0]  hors                           相等=2（相等=左上）
+  // [5, 0, 0, 0]  horse                          删除=3（删除=上+1）
   //               当前
 
   //额外举个插入的例子
   //                      a        ac      act
   // 0, 1, 2        0     1        2
-  // 1, 0, 0  a     1     相等=0   添加=1
-  // 2, 0, 0  at    2                      相等=1
+  // 1, 0, 0  a     1     相等=0   添加=1（左+1，a到ac = a到a + 1）
+  // 2, 0, 0  at    2                      相等=1（左上）
+
+  // 总结规律 相等=左上 增加=左+1 删除=上+1
 
   // 如果其中一个字符为空（前0字符），则变为相同最小步骤为另一字符长度
   // 接下来从1,1开始把其他的算出来
@@ -52,5 +53,7 @@ var minDistance = function (word1, word2) {
   return cache[word1.length][word2.length]
 };
 
-//console.log(minDistance("horse", "ros"))
-console.log(minDistance('','a'))
+console.log(minDistance('kitten', 'sitting'))
+
+// console.log(minDistance("horse", "ros"))
+// console.log(minDistance('', 'a'))
