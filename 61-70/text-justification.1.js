@@ -39,35 +39,26 @@ var fullJustify = function (words, maxWidth) {
     }
   }
   //返回结果，需要把每行的词转换为两端对齐的格式
-  return rtn.map((o, i) => {
-    //最后一行，
-    if (i == rtn.length - 1) {
-      let x = o.ws
-      let str = ''
-      for (let i = 0; i < x.length - 1; i++) {
-        str += x[i] + ' '
-      }
-      str += x[x.length - 1]
-      str += getSpaces(maxWidth - str.length)
-      return str
-    }
-    //其他行
-    return deal(o.ws, o.len)
-  })
+  return rtn.map((o) => deal(o.ws, o.len))
 
-  //其他行处理（两端对齐）
+  //每行处理（两端对齐）
   function deal(ws, len) {
     let left = maxWidth - len
+    //只有一个词
     if (ws.length == 1) return ws[0] + getSpaces(left)
-
+    //平均空隙
     let gaplen = Math.floor(left / (ws.length - 1))
+    //多余空隙（优先从左边补）
     let gapLeft = left - gaplen * (ws.length - 1)
     let rtn = '', gapS = getSpaces(gaplen)
+    //每个词+平均空隙个空格，如果有多余空隙，则多补1空格
     for (let i = 0; i < ws.length - 1; i++) {
       rtn += ws[i] + gapS
       if (i < gapLeft) rtn += ' '
     }
+    //追加本行最后一个词
     rtn += ws[ws.length - 1]
+    //返回
     return rtn
   }
 
@@ -76,4 +67,7 @@ var fullJustify = function (words, maxWidth) {
   }
 };
 
-console.log(fullJustify(["What", "must", "be", "acknowledgment", "shall", "be"], 16))
+console.log(fullJustify([
+  "the", "quick", "brown", 
+  "fox", "jumps", "over", 
+  "the", "lazy", "dog"], 16).join('\n'))
