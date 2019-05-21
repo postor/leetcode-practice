@@ -49,7 +49,7 @@ var minDistance = function (word1, word2) {
       )
     }
   }
-  console.table(cache)
+  // console.table(cache)
   return cache[word1.length][word2.length]
 };
 
