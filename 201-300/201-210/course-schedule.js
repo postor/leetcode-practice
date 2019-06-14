@@ -22,5 +22,5 @@ var canFinish = function (numCourses, prerequisites) {
   }
 };
 
-console.log(canFinish(2, [[1, 0], [0, 1]]))
-console.log(canFinish(8, [[1, 0], [2, 6], [1, 7], [6, 4], [7, 0], [0, 5]]))
+// console.log(canFinish(2, [[1, 0], [0, 1]]))
+// console.log(canFinish(8, [[1, 0], [2, 6], [1, 7], [6, 4], [7, 0], [0, 5]]))
