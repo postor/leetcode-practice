@@ -44,4 +44,4 @@ var maxProfit = function (prices) {
   return dp[dp.length - 1]
 };
 
-console.log(maxProfit([6, 1, 3, 2, 4, 7]))
+// console.log(maxProfit([6, 1, 3, 2, 4, 7]))
