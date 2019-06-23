@@ -6,12 +6,17 @@
  */
 var countRangeSum = function (nums, lower, upper) {
   if (!nums.length) return 0
-  let sums = [], total = 0
+  let sums0 = nums.map(x => x)
+  for (let i = 1; i < nums.length; i++) sums0[i] = sums0[i - 1] + nums[i]
+
+  let total = 0
   for (let i = 0; i < nums.length; i++) {
-    sums = sums.map(x => x + nums[i])
-    sums.push(nums[i])
-    sums.forEach(x => x >= lower && x <= upper && total++)
+    for (let j = i; j < nums.length; j++) {
+      let sum = i == 0 ? sums0[j] : sums0[j] - sums0[i - 1]
+      sum >= lower && sum <= upper && total++
+    }
   }
+
   return total
 };
 
