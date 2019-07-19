@@ -3,9 +3,9 @@
  * @param {number} target
  * @return {number}
  */
-var combinationSum4 = function (nums, target) {
-  let arr = [1], ai = 1
+var combinationSum4 = function (nums, target) {  
   let count = 0
+  let cCache = {}
   r()
   return count
 
@@ -34,13 +34,19 @@ var combinationSum4 = function (nums, target) {
   }
 
   function C(x, y) {
+    if(cCache[x] && cCache[x][y]) return cCache[x][y]
     let top = 1, bottom = 1
     for (let i = 1; i <= x; i++) {
       bottom *= i
       top *= y - i + 1
     }
-    return top / bottom
+    let rtn = top / bottom
+    if(!cCache[x]) cCache[x] = {}
+    cCache[x][y] = rtn
+    return rtn
   }
 };
 
-console.log(combinationSum4([1, 2, 3], 4))
+console.time()
+console.log(combinationSum4(require('./combination-sum-iv.data'), 999))
+console.timeEnd()
