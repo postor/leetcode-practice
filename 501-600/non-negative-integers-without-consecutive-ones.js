@@ -23,11 +23,11 @@ var findIntegers = function (num) {
   }
 };
 
-// new Array(10).fill(0).forEach((x, i) => {
-//   console.log(i + 1 + '=>' + findIntegers(i + 1))
-// })
+new Array(10).fill(0).forEach((x, i) => {
+  console.log(i + 1 + '=>' + findIntegers(i + 1))
+})
 
 // console.log(findIntegers(10))
-console.time()
-console.log(findIntegers(997289222))
-console.timeEnd()
+// console.time()
+// console.log(findIntegers(997289222))
+// console.timeEnd()
