@@ -4,37 +4,45 @@
  * @return {number}
  */
 var kthSmallest = function (matrix, k) {
-  if (!matrix.length) return 0
-  let q = [new Item(0, 0)]
-  let left = k
-  let used = matrix.map(x => x.map(y => false))
-  while (q.length) {
-    // replace this sort with sorted list, then sort become O log(n)
-    q.sort((a, b) => {
-      return matrix[a.i][a.j] - matrix[b.i][b.j]
-    })
-    let it = q.shift()
-    used[it.i][it.j] = true
-    left--
-    if (left == 0) return matrix[it.i][it.j]
-    if (it.j < matrix[it.i].length - 1) {
-      q.push(new Item(it.i, it.j + 1))
-    }
-    if (it.i < matrix.length - 1) {
-      q.push(new Item(it.i + 1, it.j))
-    }
-  }
-  return 0
+  let h = matrix.length, w = matrix[0].length
+  if (!h || !w) return 0
+  const walked = matrix.map(x => x.map(y => false))
+  const uncertains = [[0, 0]]
+  walked[0][0] = true
 
-  function Item(i, j) {
-    this.i = i
-    this.j = j
+  let cur = 1
+  while (cur <= k) {
+    uncertains.sort(([i1, j1], [i2, j2]) => matrix[i1][j1] - matrix[i2][j2])
+    if (k == cur) {
+      let [i, j] = uncertains[0]
+      return matrix[i][j]
+    }
+    let [i, j] = uncertains.shift() // get the smallist
+    tryPush(i, j + 1)
+    tryPush(i + 1, j)
+    cur++
   }
+
+  function tryPush(i, j) {
+    if (i == h || j == w) return false
+
+    if (walked[i][j]) return false
+    walked[i][j] = true
+
+    uncertains.push([i, j])
+  }
+
 };
 
+// console.log(kthSmallest([
+//   [1, 5, 9],
+//   [10, 11, 13],
+//   [12, 13, 15]
+// ],
+//   6))
+
 console.log(kthSmallest([
-  [1, 5, 9],
-  [10, 11, 13],
-  [12, 13, 15]
-],
-  8))
+  [1, 3, 5],
+  [6, 7, 12],
+  [11, 14, 14]
+], 6))

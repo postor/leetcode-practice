@@ -6,21 +6,13 @@
  */
 var poorPigs = function (buckets, minutesToDie, minutesToTest) {
   let testCount = minutesToTest / minutesToDie
-  let testWithXPigs = (x) => {
-    let lastRound = Math.pow(2, x - 3)
-    let otherRound = 1
-    for (let y = 1; y > 2 - testCount; y -= 1) {
-      otherRound *= (x + y)
-    }
-    return lastRound * otherRound
+  let pigs = 0
+  while (Math.pow(testCount + 1, pigs) < buckets) {
+    pigs++
   }
-
-  let p = testCount
-  while (true) {
-    if (testWithXPigs(p) >= buckets) return p
-    p++
-  }
+  return pigs
 
 };
 
-console.log(poorPigs(1000, 15, 60))
+// console.log(poorPigs(1000, 15, 60))
+// console.log(poorPigs(4, 15, 15))

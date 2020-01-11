@@ -3,50 +3,26 @@
  * @param {number} target
  * @return {number}
  */
-var combinationSum4 = function (nums, target) {  
-  let count = 0
-  let cCache = {}
-  r()
-  return count
+var combinationSum4 = function (nums, target) {
+  const cache = new Array(target + 1)
+  let rtn = r(target)
+  return rtn
 
-  function r(i = 0, cur = 0, c = []) {
-    if (i >= nums.length) return
-    let t = cur, c1 = c.concat()
-    c1[i]=0
-    while (t < target) {
-      r(i + 1, t, c1.concat())
-      t += nums[i]
-      c1[i] = c1[i] + 1
-      if (t == target) {
-        count += a(c1)
-      }
+  function r(target) {
+    if (target < 0) return 0
+    if (target == 0) return 1
+    if (cache[target] !== undefined) return cache[target]
+    let total = 0
+    for (let i = 0; i < nums.length; i++) {
+      total += r(target - nums[i])
     }
-  }
-  function a(counts = []) {
-    if (counts.length == 1) return 1
-    let total = counts.reduce((a, b) => a + b)
-    let rtn = 1
-    for (let i = 1; i < counts.length; i++) {
-      rtn *= C(counts[i], total)
-      total -= counts[i]
-    }
-    return rtn
-  }
-
-  function C(x, y) {
-    if(cCache[x] && cCache[x][y]) return cCache[x][y]
-    let top = 1, bottom = 1
-    for (let i = 1; i <= x; i++) {
-      bottom *= i
-      top *= y - i + 1
-    }
-    let rtn = top / bottom
-    if(!cCache[x]) cCache[x] = {}
-    cCache[x][y] = rtn
-    return rtn
+    cache[target] = total
+    return total
   }
 };
 
-console.time()
-console.log(combinationSum4(require('./combination-sum-iv.data'), 999))
-console.timeEnd()
+// console.log(combinationSum4([1, 2, 3],4))
+
+// console.time()
+// console.log(combinationSum4(require('./combination-sum-iv.data'), 999))
+// console.timeEnd()

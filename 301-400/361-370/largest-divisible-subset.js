@@ -3,26 +3,22 @@
  * @return {number[]}
  */
 var largestDivisibleSubset = function (nums) {
-  if (nums.length < 2) return nums
-  nums.sort((a, b) => a - b)
-  let result = [nums[0]]
-  for (let i = 0; i < nums.length - 1; i++) {
-    for (let j = i + 1; j < nums.length; j++) {
-      let t = tryIJ(i, j)
-      if (t.length > result.length) result = t
+  nums.sort((a,b)=>a-b)
+  let currents = []
+  nums.forEach(x => {
+    let toAppend = [x]
+    for (let i = 0; i < currents.length; i++) {
+      let y = currents[i]
+      if (x % y[y.length - 1] == 0) {
+        toAppend = y.concat(x)
+        break
+      }
     }
-  }
-  return result
-
-  function tryIJ(i, j) {
-    if (nums[j] % nums[i] != 0) return []
-    let arr = [nums[i], nums[j]]
-    for (let k = j + 1; k < nums.length; k++) {
-      if (nums[k] % arr[arr.length - 1] == 0) arr.push(nums[k])
-    }
-    return arr
-  }
-
+    // console.log(JSON.stringify({ toAppend, currents }))
+    currents.push(toAppend)
+    currents = currents.sort((a, b) => b.length - a.length)
+    // console.log(currents.map(x => x[x.length - 1] + ':' + x.length).join('|') + "\n")
+  })
+  return currents[0]||[]
 };
-
-console.log(largestDivisibleSubset([3,4,16,8]))
+// console.log(largestDivisibleSubset([7, 1, 2, 3, 4, 16, 12, 24,48]))
