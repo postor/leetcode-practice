@@ -16,7 +16,7 @@ var rangeBitwiseAnd = function (m, n) {
 
   // 与运算
   let x = n
-  for (i = m; i < n; i++) {
+  for (let i = m; i < n; i++) {
     x = x & i
     if (!x) return 0
   }
