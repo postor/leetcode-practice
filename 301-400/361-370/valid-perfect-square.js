@@ -3,6 +3,7 @@
  * @return {boolean}
  */
 var isPerfectSquare = function (num) {
+  if (num == 1) return true
   return r(0, num)
 
   function r(from, to) {
@@ -17,3 +18,5 @@ var isPerfectSquare = function (num) {
 
 // console.log(isPerfectSquare(16))
 // console.log(isPerfectSquare(14))
+// console.log(isPerfectSquare(1))
+// console.log(isPerfectSquare(4))

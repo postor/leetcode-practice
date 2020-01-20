@@ -1,26 +1,67 @@
 
-class Item {
-  constructor(step, length) {
-    this.step = step
-    this.length = length
-  }
-}
 class ExpectDic {
   constructor() {
-    this.dic = {}
+    // key = nums start a subseq
+    this.dic1 = new Map()
+    // key = nums expected
+    this.dicExpect = new Map()
   }
+
+  addVal(x) {
+    const { dic1 } = this
+    let expected = this.getExpects(x)
+    let toAdd = [], seqCounter = 0
+    expected.forEach((count, step) => {
+      // once expected, count seqs and push new expects. eg: addVal(6) after add 2 and 4, 6 is prepared when addVal(4)
+      toAdd.push([x + step, step, count])
+      seqCounter += count
+    })
+    dic1.forEach((count, val) => {
+      // every added number, might be a start
+      let step = x - val
+      toAdd.push([x + step, step, count])
+    })
+    toAdd.forEach(([x, step, count]) => {
+      this.addExpect(x, step, count)
+    })
+    // add to dic
+    if (!dic1.has(x)) {
+      dic1.set(x, 1)
+    } else {
+      dic1.set(x, dic1.get(x) + 1)
+    }
+    return seqCounter
+  }
+
   /**
-   * 
-   * @param {*} x
-   * @return {Item[]} 
+   * get expected details of expected number
+   * @param {*} x the expected number
+   * @return {Map} rtn key=step, val=count  
    */
   getExpects(x) {
-    if (this.dic[x]) return this.dic[x]
-    return []
+    if (this.dicExpect.has(x)) {
+      return this.dicExpect.get(x)
+    }
+    return new Map()
   }
-  addExpect(x, step, length) {
-    if (!this.dic[x]) this.dic[x] = []
-    this.dic[x].push(new Item(step, length))
+
+  /**
+   * add an expected number 
+   * @param {*} x 
+   * @param {*} step 
+   * @param {*} count 
+   */
+  addExpect(x, step, count) {
+    const dic = this.dicExpect
+    if (!dic.has(x)) {
+      const map = new Map()
+      map.set(step, count)
+      dic.set(x, map)
+    } else {
+      const map = dic.get(x)
+      const curCount = map.has(step) ? map.get(step) : 0
+      map.set(step, count + curCount)
+    }
   }
 }
 
@@ -30,22 +71,12 @@ class ExpectDic {
  */
 var numberOfArithmeticSlices = function (A) {
   let total = 0, expectDic = new ExpectDic()
-
   A.forEach((x, i) => {
-    expectDic.getExpects(x).forEach(it => {
-      if (it.length > 1) {
-        total += 1
-      }
-      expectDic.addExpect(x + it.step, it.step, it.length + 1)
-    })
-    for (let j = 0; j < i; j++) {
-      let step = x - A[j]
-      expectDic.addExpect(x + step, step, 2)
-    }
+    let curCount = expectDic.addVal(x)
+    total += curCount
   })
-
   return total
-
 };
 
 // console.log(numberOfArithmeticSlices([2, 4, 6, 8, 10]))
+// console.log(numberOfArithmeticSlices([1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]))
