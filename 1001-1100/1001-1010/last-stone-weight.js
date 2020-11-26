@@ -13,6 +13,10 @@ class BST {
   }
 
   addNode(val, arr) {
+    if (!this.root) {
+      this.root = new BSTNode(val, arr)
+      return
+    }
     let t = this.root
     while (true) {
       if (val < t.val) {
@@ -42,7 +46,7 @@ class BST {
     let t = this.getMin()
     if (!t.parent) {
       this.root = t.right
-      this.root.parent = null
+      this.root && (this.root.parent = null)
     } else {
       t.parent.left = t.right
       t.right && (t.right.parent = t.parent)
@@ -59,7 +63,7 @@ class BST {
     let t = this.getMax()
     if (!t.parent) {
       this.root = t.left
-      this.root.parent = null
+      this.root && (this.root.parent = null)
     } else {
       t.parent.right = t.left
       t.left && (t.left.parent = t.parent)
@@ -67,3 +71,24 @@ class BST {
     return t
   }
 }
+
+/**
+ * @param {number[]} stones
+ * @return {number}
+ */
+var lastStoneWeight = function (stones) {
+  let bst = new BST(stones, stones)
+  while (true) {
+
+    if (!bst.root) return 0
+    let first = bst.popMax()
+    if (!bst.root) return first.val
+    let second = bst.popMax()
+    let diff = Math.abs(first.val - second.val)
+    if (diff) bst.addNode(diff, diff)
+  }
+};
+
+// console.log(lastStoneWeight([2, 7, 4, 1, 8, 1]))
+
+// console.log(lastStoneWeight([1, 3]))
