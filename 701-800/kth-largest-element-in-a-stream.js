@@ -76,3 +76,45 @@ class BST {
     return t
   }
 }
+
+/**
+ * @param {number} k
+ * @param {number[]} nums
+ */
+var KthLargest = function (k, nums) {
+  this.k = k
+  let vals = nums.slice(0, k)
+  this.bst = new BST(vals, vals)
+  this.size = vals.length
+  for (let i = k; i < nums.length; i++) {
+    this.add(nums[i])
+  }
+};
+
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthLargest.prototype.add = function (val) {
+  if (this.size < this.k) {
+    this.size++
+    this.bst.addNode(val)
+    return this.bst.getMin().val
+  }
+  let node = this.bst.getMin()
+  if (node && (val > node.val)) {
+    this.bst.popMin()
+    this.bst.addNode(val)
+  }
+  return this.bst.getMin().val
+};
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * var obj = new KthLargest(k, nums)
+ * var param_1 = obj.add(val)
+ */
+
+var obj = new KthLargest(1, [])
+console.log(obj.add(-3))
+console.log(obj.add(-2))

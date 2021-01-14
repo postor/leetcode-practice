@@ -37,7 +37,7 @@ class BST {
     }
   }
 
-  getMin() {
+  getMax() {
     if (!this.root) return undefined
     let t = this.root
     while (t.left) t = t.left
@@ -46,7 +46,7 @@ class BST {
 
   popMin() {
     if (!this.root) return undefined
-    let t = this.getMin()
+    let t = this.getMax()
     if (!t.parent) {
       this.root = t.right
       if (this.root) this.root.parent = null
@@ -76,3 +76,58 @@ class BST {
     return t
   }
 }
+
+/**
+ * @param {number} k
+ * @param {number[]} nums
+ */
+var KthSmallest = function (k, nums) {
+  this.k = k
+  let vals = nums.slice(0, k)
+  this.bst = new BST(vals, vals)
+  this.size = vals.length
+  for (let i = k; i < nums.length; i++) {
+    this.add(nums[i])
+  }
+};
+
+/** 
+ * @param {number} val
+ * @return {number}
+ */
+KthSmallest.prototype.add = function (val) {
+  if (this.size < this.k) {
+    this.size++
+    this.bst.addNode(val)
+    return this.bst.getMax().val
+  }
+  let node = this.bst.getMax()
+  if (node && (val < node.val)) {
+    this.bst.popMax()
+    this.bst.addNode(val)
+  }
+  return this.bst.getMax().val
+};
+
+
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number}
+ */
+var smallestDistancePair = function (nums, k) {
+  let kth = new KthSmallest(k, []), zeros = 0
+  for (let i = 1; i < nums.length; i++) {
+    for (let j = 0; j < i; j++) {
+      let distance = Math.abs(nums[i] - nums[j])
+      kth.add(distance)
+      if (!distance) {
+        zeros++
+        if (zeros == k) return 0
+      }
+    }
+  }
+  return kth.bst.getMax().val
+};
+
+// console.log(smallestDistancePair([1, 3, 1], 1))
